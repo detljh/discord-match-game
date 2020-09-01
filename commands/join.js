@@ -2,10 +2,10 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: 'join',
-    users: true,
     description: 'Join a user\'s game.',
     usage: '<user>',
     cooldown: 2,
+    users: true,
     execute(message, args) {
         const user = message.mentions.users.first();
         const embed = new MessageEmbed()

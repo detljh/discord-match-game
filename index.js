@@ -33,7 +33,7 @@ client.on('message', message => {
     }    
 
     if ((command.args && !args.length) || (command.users && !message.mentions.users.first())) {
-        let reply = "Incorrect usage.";
+        let reply = "Incorrect usage. Use *!help* for more.";
         if (command.usage) {
             reply += `\nUsage: *${prefix}${command.name} ${command.usage}*`;
     
