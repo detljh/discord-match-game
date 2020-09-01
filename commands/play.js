@@ -44,11 +44,18 @@ module.exports = {
         const boardColors = [0xf57334, 0xf5ea73, 0xa0f573, 0x73f5ce, 0x73c7f5, 0x7773f5, 0xd073f5, 0xf573ba];
         embed.setTitle(`${row}x${column} Board`);
         embed.setColor(boardColors[Math.floor(Math.random() * boardColors.length)]);
-        
+
+        let cards = [];
+        let chars = 'abcdefghijklmnopqrstuvwxyz';
+        for (let i = 0; i < numCards / 2; i++) {
+            cards.push(chars[i]);
+            cards.push(chars[i]);
+        }
+
         let board = "";
         for (let i = 0; i < column; i++) {
             for (let j = 0; j < row; j++) {
-                board += "o";
+                board += cards.splice(Math.floor(Math.random() * cards.length), 1);   
             }
             board += "\n";
         }
