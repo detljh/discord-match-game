@@ -14,6 +14,7 @@ module.exports = class Game {
         this.numCards = row * column;
         this.boardLayout = [];
         this.currentBoard = Array.from({ length: row }, () => Array.from({ length: column }, () => 0));
+        this.players = [];
         this.setup();
     }
 
@@ -39,5 +40,9 @@ module.exports = class Game {
 
         this.output.setDescription(boardOutput);
         return this.output;
+    }
+
+    getPlayers() {
+        return this.players;
     }
 }

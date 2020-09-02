@@ -3,12 +3,12 @@ const Game = require('../main/game.js');
 
 module.exports = {
     name: 'play',
-    aliases: ['start', 'p'],
+    aliases: ['create', 'p'],
     description: 'Start a match game of a specified size.',
     usage: '<size>',
     cooldown: 4,
     args: true,
-    execute(message, args) {
+    execute(message, args, playerMap) {
         let embed = new MessageEmbed();
         if (args.length > 2) {
             embed.setDescription(`Too many size dimensions provided. Please specify at most two dimensions.`);
@@ -42,9 +42,7 @@ module.exports = {
             return message.reply(embed);
         }
 
-       
-        const game = new Game(message.author.id, row, column);
-
-        message.reply(game.getOutput());
+        playerMap.set(message.author.id, []);
+        message.reply(`Please wait for users to join the game.`);
     }
 }
