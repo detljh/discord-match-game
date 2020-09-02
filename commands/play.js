@@ -8,8 +8,13 @@ module.exports = {
     usage: '<size>',
     cooldown: 4,
     args: true,
-    execute(message, args, playerMap) {
+    execute(message, args, rooms, users) {
         let embed = new MessageEmbed();
+        if (users.get(message.author.id)) {
+            embed.setDescription(`You are already in a game. Please exit it first.`);
+            return message.reply(embed);
+        }
+
         if (args.length > 2) {
             embed.setDescription(`Too many size dimensions provided. Please specify at most two dimensions.`);
             return message.reply(embed);
@@ -42,7 +47,7 @@ module.exports = {
             return message.reply(embed);
         }
 
-        playerMap.set(message.author.id, []);
+        rooms.set(message.author.id, []);
         message.reply(`Please wait for users to join the game.`);
     }
 }
