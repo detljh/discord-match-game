@@ -3,8 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const boardColors = [0xf57334, 0xf5ea73, 0xa0f573, 0x73f5ce, 0x73c7f5, 0x7773f5, 0xd073f5, 0xf573ba];
 
 module.exports = class Game {
-    constructor(author, row, column) {
-        this.author = author;
+    constructor(row, column) {
         this.row = row;
         this.column = column;
         this.color = boardColors[Math.floor(Math.random() * boardColors.length)];
@@ -15,7 +14,7 @@ module.exports = class Game {
         this.boardLayout = [];
         this.currentBoard = Array.from({ length: row }, () => Array.from({ length: column }, () => 0));
         this.players = [];
-        this.setup();
+        this.started = false;
     }
 
     setup() {
@@ -27,6 +26,15 @@ module.exports = class Game {
         }
 
         this.boardLayout = Array.from({ length: this.row }, () => Array.from({ length: this.column }, () => cards.splice(Math.floor(Math.random() * cards.length), 1)));
+    }
+
+    startGame() {
+        this.started = true;
+        this.setup();
+    }
+
+    getStatus() {
+        return this.started;
     }
 
     getOutput() {
@@ -44,5 +52,9 @@ module.exports = class Game {
 
     getPlayers() {
         return this.players;
+    }
+
+    setPlayers(players) {
+        this.players = players;
     }
 }

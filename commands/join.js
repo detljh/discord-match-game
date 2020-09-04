@@ -8,9 +8,9 @@ module.exports = {
     users: true,
     execute(message, args, rooms, users) {
         const user = message.mentions.users.first();
-        let players = rooms.get(user.id);
+        let room = rooms.get(user.id);
         const embed = new MessageEmbed();
-        if (!players) {
+        if (!room) {
             embed.setDescription(`This player has not created a game.`);
             return message.reply(embed);
         }
@@ -20,14 +20,21 @@ module.exports = {
             return message.reply(embed);
         }
 
+        let players = room.getPlayers();
+
+        if (players.length > 4) {
+            embed.setDescription(`This game is already full.`);
+            return message.reply(embed);
+        }
+
         players = [...players, message.author.id];
-        rooms.set(user.id, players);
+        room.setPlayers(players);
         users.set(message.author.id, user.id);
 
-        let reply = `You have joined ${user.toString()}'s game. Current Players:\n1. ${user.toString()}\n`;
+        let reply = `You have joined ${user.toString()}'s game. Current Players:\n`;
 
         for (let i = 0; i < players.length; i++) {
-            reply += `${i+2}. <@${players[i]}>\n`;
+            reply += `${i+1}. <@${players[i]}>\n`;
         }
         
         embed.setDescription(reply);

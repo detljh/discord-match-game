@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, DiscordAPIError } = require('discord.js');
 const Game = require('../main/game.js');
 
 module.exports = {
@@ -47,7 +47,9 @@ module.exports = {
             return message.reply(embed);
         }
 
-        rooms.set(message.author.id, []);
+        let game = new Game(row, column);
+        game.setPlayers([message.author.id]);
+        rooms.set(message.author.id, game);
         message.reply(`Please wait for users to join the game.`);
     }
 }
