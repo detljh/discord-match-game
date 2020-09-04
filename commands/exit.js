@@ -4,33 +4,34 @@ module.exports = {
     name: 'exit',
     aliases: ['stop'],
     description: 'Exits the game you are currently in.',
-    cooldown: 5,
+    cooldown: 10,
     execute(message, args, rooms, users) {
         let roomMaster = users.get(message.author.id);    
-        let room = rooms.get(message.author.id);
         let reply = "";
-        if (room) {
+
+        if (roomMaster) {
+            let room = rooms.get(roomMaster);
             let players = room.getPlayers();
+            
             if (players.length == 1) {
                 rooms.delete(message.author.id);
-                reply += `Game master <@${message.author.id}> has exited the game.`;
+                reply += `<@${message.author.id}>'s game has ended.`;
             } else {
                 players = players.filter(p => p != message.author.id);
                 room.setPlayers(players);
                 rooms.set(players[0], room);
                 rooms.delete(message.author.id);
-                reply += `Game master <@${message.author.id}> has exited the game.`;
-                reply += `<@${players[0]}> is now the game master.`;
+                if (roomMaster == message.author.id) {
+                    reply += `Game master <@${message.author.id}> has exited the game.`;
+                    reply += `<@${players[0]}> is now the game master.`;
+                } else {
+                    reply += `<@${message.author.id}> has exited the game.`;
+                }
             }
-        } else if (roomMaster) {
-            let room = rooms.get(roomMaster);
-            let players = rooms.get(roomMaster).getPlayers();
-            players = players.filter(p => p != message.author.id);
-            room.setPlayers(players);
+
             users.delete(message.author.id);
-            reply += `<@${message.author.id}> has exited the game.`;
         } else {
-            reply += `You are not in a room.`;
+            reply += `You are not in a game.`;
         }
 
         const embed = new MessageEmbed()

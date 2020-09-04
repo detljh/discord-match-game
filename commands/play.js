@@ -50,6 +50,7 @@ module.exports = {
         let game = new Game(row, column);
         game.setPlayers([message.author.id]);
         rooms.set(message.author.id, game);
+        users.set(message.author.id, message.author.id);
         message.reply(`Please wait for users to join the game.`);
     }
 }
