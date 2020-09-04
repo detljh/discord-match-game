@@ -23,6 +23,6 @@ module.exports = {
         embed.setDescription(reply);
         message.channel.send(embed);
 
-        return message.channel.send(room.getOutput());
+        message.channel.send(room.getOutput());
     }    
 }

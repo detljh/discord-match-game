@@ -15,6 +15,7 @@ module.exports = class Game {
         this.currentBoard = Array.from({ length: row }, () => Array.from({ length: column }, () => 0));
         this.players = [];
         this.started = false;
+        this.currentPlayer = null;
     }
 
     setup() {
@@ -26,6 +27,7 @@ module.exports = class Game {
         }
 
         this.boardLayout = Array.from({ length: this.row }, () => Array.from({ length: this.column }, () => cards.splice(Math.floor(Math.random() * cards.length), 1)));
+        this.currentPlayer = this.players[Math.floor(Math.random() * this.players.length)];
     }
 
     startGame() {
@@ -46,7 +48,8 @@ module.exports = class Game {
             boardOutput += "\n";
         }
 
-        this.output.setDescription(boardOutput);
+        let playerOutput = `\n<@${this.currentPlayer}>'s turn`;
+        this.output.setDescription(boardOutput + playerOutput);
         return this.output;
     }
 
@@ -56,5 +59,9 @@ module.exports = class Game {
 
     setPlayers(players) {
         this.players = players;
+    }
+
+    getCurrentPlayer() {
+        return this.currentPlayer;
     }
 }
