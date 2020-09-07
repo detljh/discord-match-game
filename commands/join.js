@@ -20,7 +20,7 @@ module.exports = {
         //     return message.reply(embed);
         // }
 
-        if (game.isStarted()) {
+        if (game.isSetupStarted()) {
             embed.setDescription(`This game has already started.`);
             return message.reply(embed);
         }

@@ -19,15 +19,27 @@ module.exports = {
             embed.setDescription(reply);
             return message.reply(embed);
         } else {
-            game.startGame();
+            game.startSetup();
             reply += "The game with players "
             reply += players.map(p => `<@${p}>`).join(" ");
             reply += " has started.";
         }
 
+        const timeout = game.getNumCards() / Math.log10(game.getNumCards() ** 3) * 1000;
+        reply += ` The cards will be shown for a few seconds.`;
         embed.setDescription(reply);
         message.channel.send(embed);
 
-        message.channel.send(game.getOutput());
+        message.channel.send(game.getOutput(game.getBoardLayout()))
+        .then(msg => {
+            msg.delete({ timeout: timeout })
+            .then(() => {
+                message.channel.send(game.getOutput(game.getCurrentBoard()));
+                game.startGame();
+            })
+            .catch(console.error);
+        })
+        .catch(console.error);
+
     }    
 }

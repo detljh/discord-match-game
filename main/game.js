@@ -12,7 +12,8 @@ module.exports = class Game {
         this.boardLayout = [];
         this.currentBoard = Array.from({ length: row }, () => Array.from({ length: column }, () => 0));
         this.players = [];
-        this.started = false;
+        this.setupStarted = false;
+        this.gameStarted = false;
         this.currentPlayer = null;
     }
 
@@ -28,13 +29,25 @@ module.exports = class Game {
         this.currentPlayer = this.players[Math.floor(Math.random() * this.players.length)];
     }
 
-    startGame() {
-        this.started = true;
+    startSetup() {
+        this.setupStarted = true;
         this.setup();
     }
 
-    isStarted() {
-        return this.started;
+    startGame() {
+        this.gameStarted = true;
+    }
+
+    isSetupStarted() {
+        return this.setupStarted;
+    }
+
+    isGameStarted() {
+        return this.gameStarted;
+    }
+
+    getNumCards() {
+        return this.numCards;
     }
 
     getCurrentBoard() {
@@ -49,11 +62,23 @@ module.exports = class Game {
         return boardOutput;
     }
 
-    getOutput() {
+    getBoardLayout() {
+        let boardOutput = "";
+        for (let i = 0; i < this.column; i++) {
+            for (let j = 0; j < this.row; j++) {
+                boardOutput += this.boardLayout[i][j];
+            }
+            boardOutput += "\n";
+        }
+
+        return boardOutput;
+    }
+
+    getOutput(board) {
         this.output = new MessageEmbed()
         .setTitle(`${this.row}x${this.column} Board`)
         .setColor(this.color)
-        .setDescription(this.getCurrentBoard())
+        .setDescription(board)
         .addField('Current Player', `<@${this.currentPlayer}>`, true)
         .addField('All Players', this.players.map(p => `<@${p}>`).join(" "), true);
         return this.output;
