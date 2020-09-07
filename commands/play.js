@@ -36,6 +36,11 @@ module.exports = {
             column = args[1];
         }
 
+        if (row > 25 || column > 25 || row < 2 || column < 2) {
+            embed.setDescription(`Rows and columns must be in the range 2-25.`);
+            return message.reply(embed);
+        }
+
         const numCards = row * column;
         if (numCards % 2 != 0) {
             embed.setDescription(`Please specify dimensions that create a board with an even number of cards.`);

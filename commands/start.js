@@ -40,6 +40,5 @@ module.exports = {
             .catch(console.error);
         })
         .catch(console.error);
-
     }    
 }

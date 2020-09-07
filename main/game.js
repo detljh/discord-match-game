@@ -52,9 +52,17 @@ module.exports = class Game {
 
     getCurrentBoard() {
         let boardOutput = "";
-        for (let i = 0; i < this.column; i++) {
-            for (let j = 0; j < this.row; j++) {
-                boardOutput += this.currentBoard[i][j];
+        for (let i = 0; i <= this.row; i++) {
+            for (let j = 0; j <= this.column; j++) {
+                if (i == 0 && j == 0) {
+                    boardOutput += "x";
+                } else if (i == 0) {
+                    boardOutput += j;
+                } else if (j == 0) {
+                    boardOutput += String.fromCharCode('A'.charCodeAt(0) + i - 1);
+                } else {
+                    boardOutput += this.currentBoard[i-1][j-1];
+                }
             }
             boardOutput += "\n";
         }
@@ -64,9 +72,17 @@ module.exports = class Game {
 
     getBoardLayout() {
         let boardOutput = "";
-        for (let i = 0; i < this.column; i++) {
-            for (let j = 0; j < this.row; j++) {
-                boardOutput += this.boardLayout[i][j];
+        for (let i = 0; i <= this.row; i++) {
+            for (let j = 0; j <= this.column; j++) {
+                if (i == 0 && j == 0) {
+                    boardOutput += "x";
+                } else if (i == 0) {
+                    boardOutput += j;
+                } else if (j == 0) {
+                    boardOutput += String.fromCharCode('A'.charCodeAt(0) + i - 1);
+                } else {
+                    boardOutput += this.boardLayout[i-1][j-1];
+                }
             }
             boardOutput += "\n";
         }
