@@ -16,7 +16,6 @@ module.exports = {
         // `!board: shows the current board\n` +
         // `!players: shows the current players`
         
-        const data = [];
         const embed = new MessageEmbed();
         const { commands } = message.client
 

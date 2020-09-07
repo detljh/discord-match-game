@@ -6,11 +6,11 @@ module.exports = {
     usage: '<user>',
     cooldown: 2,
     users: true,
-    execute(message, args, rooms, users) {
+    execute(message, args, games, users) {
         const user = message.mentions.users.first();
-        let room = rooms.get(user.id);
+        let game = games.get(user.id);
         const embed = new MessageEmbed();
-        if (!room) {
+        if (!game) {
             embed.setDescription(`This player has not created a game.`);
             return message.reply(embed);
         }
@@ -20,12 +20,12 @@ module.exports = {
         //     return message.reply(embed);
         // }
 
-        if (room.isStarted()) {
+        if (game.isStarted()) {
             embed.setDescription(`This game has already started.`);
             return message.reply(embed);
         }
 
-        let players = room.getPlayers();
+        let players = game.getPlayers();
 
         if (players.length > 4) {
             embed.setDescription(`This game is already full.`);
@@ -33,7 +33,7 @@ module.exports = {
         }
 
         players = [...players, message.author.id];
-        room.setPlayers(players);
+        game.setPlayers(players);
         users.set(message.author.id, user.id);
 
         let reply = `You have joined ${user.toString()}'s game. Current Players:\n`;

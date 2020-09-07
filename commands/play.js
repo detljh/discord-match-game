@@ -8,7 +8,7 @@ module.exports = {
     usage: '<size>',
     cooldown: 4,
     args: true,
-    execute(message, args, rooms, users) {
+    execute(message, args, games, users) {
         let embed = new MessageEmbed();
         if (users.get(message.author.id)) {
             embed.setDescription(`You are already in a game. Please exit it first.`);
@@ -49,7 +49,7 @@ module.exports = {
 
         let game = new Game(row, column);
         game.setPlayers([message.author.id]);
-        rooms.set(message.author.id, game);
+        games.set(message.author.id, game);
         users.set(message.author.id, message.author.id);
         message.reply(`Please wait for users to join the game.`);
     }

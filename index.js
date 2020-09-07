@@ -6,7 +6,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 // game rooms, stores game creator and players in the room
-const rooms = new Discord.Collection();
+const games = new Discord.Collection();
 // stores users and the user's room they are in
 const users = new Discord.Collection();
 
@@ -68,7 +68,7 @@ client.on('message', message => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
-        command.execute(message, args, rooms, users);
+        command.execute(message, args, games, users);
     } catch (error) {
         console.log(error);
         embed.setDescription('This command does not exist. Use !help for more.');
