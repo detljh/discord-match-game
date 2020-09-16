@@ -15,6 +15,7 @@ module.exports = class Game {
         this.setupStarted = false;
         this.gameStarted = false;
         this.currentPlayer = null;
+        this.flips = 0;
     }
 
     setup() {
@@ -26,7 +27,7 @@ module.exports = class Game {
         }
 
         this.boardLayout = Array.from({ length: this.row }, () => Array.from({ length: this.column }, () => cards.splice(Math.floor(Math.random() * cards.length), 1)));
-        this.currentPlayer = this.players[Math.floor(Math.random() * this.players.length)];
+        this.currentPlayer = Math.floor(Math.random() * this.players.length);
     }
 
     startSetup() {
@@ -95,7 +96,7 @@ module.exports = class Game {
         .setTitle(`${this.row}x${this.column} Board`)
         .setColor(this.color)
         .setDescription(board)
-        .addField('Current Player', `<@${this.currentPlayer}>`, true)
+        .addField('Current Player', `<@${this.players[this.currentPlayer]}>`, true)
         .addField('All Players', this.players.map(p => `<@${p}>`).join(" "), true);
         return this.output;
     }
@@ -109,6 +110,22 @@ module.exports = class Game {
     }
 
     getCurrentPlayer() {
-        return this.currentPlayer;
+        return this.players[this.currentPlayer];
+    }
+
+    flip(row, column) {
+        row = row.toLowerCase().charCodeAt(0) - 97;
+        column -= 1;
+        if (row < 0 || row >= this.row || column < 0 || column >= this.column) {
+            return false;
+        }
+
+        this.currentBoard[row][column] = this.boardLayout[row][column];
+        this.flips += 1;
+        if (this.flips == 2) {
+            this.flips = 0;
+            this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+        }
+        return true;
     }
 }
