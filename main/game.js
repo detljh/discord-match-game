@@ -15,7 +15,8 @@ module.exports = class Game {
         this.setupStarted = false;
         this.gameStarted = false;
         this.currentPlayer = null;
-        this.flips = 0;
+        this.flips = [];
+        this.scores = {};
     }
 
     setup() {
@@ -26,8 +27,12 @@ module.exports = class Game {
             cards.push(chars[i]);
         }
 
-        this.boardLayout = Array.from({ length: this.row }, () => Array.from({ length: this.column }, () => cards.splice(Math.floor(Math.random() * cards.length), 1)));
+        this.boardLayout = Array.from({ length: this.row }, () => Array.from({ length: this.column }, () => cards.splice(Math.floor(Math.random() * cards.length), 1)[0]));
         this.currentPlayer = Math.floor(Math.random() * this.players.length);
+
+        for (let i = 0; i < this.players.length; i++) {
+            this.scores[this.players[i]] = 0;
+        }
     }
 
     startSetup() {
@@ -121,11 +126,27 @@ module.exports = class Game {
         }
 
         this.currentBoard[row][column] = this.boardLayout[row][column];
-        this.flips += 1;
-        if (this.flips == 2) {
-            this.flips = 0;
-            this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+        this.flips.push([row, column]);
+        if (this.flips.length == 2) {
+            this.checkFlip();
         }
         return true;
+    }
+
+    checkFlip() {
+        let firstFlipRow = this.flips[0][0];
+        let firstFlipCol = this.flips[0][1];
+        let secFlipRow = this.flips[1][0];
+        let secFlipCol = this.flips[1][1];
+
+        if (this.currentBoard[firstFlipRow][firstFlipCol] == this.currentBoard[secFlipRow][secFlipCol]) {
+            this.scores[this.players[this.currentPlayer]] += 1;
+        } else {
+            this.currentBoard[firstFlipRow][firstFlipCol] = 0;
+            this.currentBoard[secFlipRow][secFlipCol] = 0;
+        }
+
+        this.flips = [];
+        this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
     }
 }
