@@ -22,20 +22,27 @@ module.exports = {
             game.startSetup();
             reply += "The game with players "
             reply += players.map(p => `<@${p}>`).join(" ");
-            reply += " has started.";
+            reply += " is starting.";
         }
 
         const timeout = game.getNumCards() / Math.log10(game.getNumCards() ** 3) * 1000;
         reply += ` The cards will be shown for a few seconds.`;
         embed.setDescription(reply);
-        message.channel.send(embed);
-
-        message.channel.send(game.getOutput(game.getBoardLayout()))
+        message.channel.send(embed)
         .then(msg => {
-            msg.delete({ timeout: timeout })
+            msg.delete({timeout: 3000})
             .then(() => {
-                message.channel.send(game.getOutput(game.getCurrentBoard()));
-                game.startGame();
+                message.channel.send(game.getOutput(game.getBoardLayout()))
+                .then(msg => {
+                    msg.delete({ timeout: timeout })
+                    .then(() => {
+                        message.channel.send(new MessageEmbed().setDescription("The game has started."));
+                        message.channel.send(game.getOutput(game.getCurrentBoard()));
+                        game.startGame();
+                    })
+                    .catch(console.error);
+                })
+                .catch(console.error);
             })
             .catch(console.error);
         })

@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { MATCH, NO_MATCH } = require('../constants/flip');
+const { NO_MATCH } = require('../constants/flip');
 
 module.exports = {
     name: 'flip',

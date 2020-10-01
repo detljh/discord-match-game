@@ -8,8 +8,12 @@ module.exports = {
         let gameMaster = users.get(message.author.id);
         let reply = "";
         if (gameMaster) {
-            let game = games.get(roomMaster);
-            
+            let game = games.get(gameMaster);
+            if (!game.isGameStarted()) {
+                reply += `You cannot check the scores yet`;
+            } else {
+                return message.channel.send(game.getScoreOutput());
+            }
         } else {
             reply += `You are not in a game.`;
         }

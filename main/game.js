@@ -8,7 +8,6 @@ module.exports = class Game {
         this.row = row;
         this.column = column;
         this.color = boardColors[Math.floor(Math.random() * boardColors.length)];
-        this.output = new MessageEmbed();
         this.numCards = row * column;
         this.boardLayout = [];
         this.currentBoard = Array.from({ length: row }, () => Array.from({ length: column }, () => 0));
@@ -98,13 +97,13 @@ module.exports = class Game {
     }
 
     getOutput(board) {
-        this.output = new MessageEmbed()
+        let output = new MessageEmbed()
         .setTitle(`${this.row}x${this.column} Board`)
         .setColor(this.color)
         .setDescription(board)
         .addField('Current Player', `<@${this.players[this.currentPlayer]}>`, true)
         .addField('All Players', this.players.map(p => `<@${p}>`).join(" "), true);
-        return this.output;
+        return output;
     }
 
     getPlayers() {
@@ -159,5 +158,19 @@ module.exports = class Game {
         this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
         this.currentBoard[firstFlipRow][firstFlipCol] = 0;
         this.currentBoard[secFlipRow][secFlipCol] = 0;
+    }
+    
+    getScoreOutput() {
+        let output = new MessageEmbed()
+        .setTitle(`Scores`)
+        .setColor(this.color);
+
+        let description = "";
+        for (let score in this.scores) {
+            description += `<@${score}>: ${this.scores[score]}\n`;
+        }
+        
+        output.setDescription(description);
+        return output;
     }
 }

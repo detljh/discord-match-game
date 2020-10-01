@@ -9,8 +9,12 @@ module.exports = {
         let gameMaster = users.get(message.author.id);
         let reply = "";
         if (gameMaster) {
-            let game = games.get(roomMaster);
-            return message.channel.send(game.getOutput(game.getCurrentBoard()));
+            let game = games.get(gameMaster);
+            if (!game.isGameStarted()) {
+                reply += `The game has not started.`;
+            } else {
+                return message.channel.send(game.getOutput(game.getCurrentBoard()));
+            }
         } else {
             reply += `You are not in a game.`;
         }
