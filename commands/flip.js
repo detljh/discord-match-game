@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { MATCH, NO_MATCH } = require('../constants/flip');
 
 module.exports = {
     name: 'flip',
@@ -13,6 +14,8 @@ module.exports = {
 
         if (!game) {
             return message.reply(new MessageEmbed().setDescription("You are not in a game."));
+        } else if (!game.isGameStarted()) {
+            return message.reply(new MessageEmbed().setDescription("You cannot flip yet."));
         }
 
         let currentPlayer = game.getCurrentPlayer();
@@ -27,10 +30,22 @@ module.exports = {
 
         row = args[0];
         column = args[1];
-        if (!game.flip(row, column)) {
+        flip = game.flip(row, column);
+        if (flip == NO_MATCH) {
+            message.channel.send(game.getOutput(game.getCurrentBoard()))
+            .then(msg => {
+                msg.delete({ timeout: 2000 })
+                .then(() => {
+                    game.resetFlip();
+                    return message.channel.send(game.getOutput(game.getCurrentBoard()));
+                })
+                .catch(console.error);
+            })
+            .catch(console.error);
+        } else if (flip) {
+            return message.channel.send(game.getOutput(game.getCurrentBoard()));
+        } else {
             return message.reply(new MessageEmbed().setDescription("Coordinates are out of range."));
         }
-
-        return message.channel.send(game.getOutput(game.getCurrentBoard()));
     }
 }

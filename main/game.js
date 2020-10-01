@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { MATCH, NO_MATCH } = require('../constants/flip');
 
 const boardColors = [0xf57334, 0xf5ea73, 0xa0f573, 0x73f5ce, 0x73c7f5, 0x7773f5, 0xd073f5, 0xf573ba];
 
@@ -128,7 +129,7 @@ module.exports = class Game {
         this.currentBoard[row][column] = this.boardLayout[row][column];
         this.flips.push([row, column]);
         if (this.flips.length == 2) {
-            this.checkFlip();
+            return this.checkFlip();
         }
         return true;
     }
@@ -141,12 +142,22 @@ module.exports = class Game {
 
         if (this.currentBoard[firstFlipRow][firstFlipCol] == this.currentBoard[secFlipRow][secFlipCol]) {
             this.scores[this.players[this.currentPlayer]] += 1;
+            this.flips = [];
+            this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+            return MATCH
         } else {
-            this.currentBoard[firstFlipRow][firstFlipCol] = 0;
-            this.currentBoard[secFlipRow][secFlipCol] = 0;
+            return NO_MATCH
         }
+    }
 
+    resetFlip() {
+        let firstFlipRow = this.flips[0][0];
+        let firstFlipCol = this.flips[0][1];
+        let secFlipRow = this.flips[1][0];
+        let secFlipCol = this.flips[1][1];
         this.flips = [];
         this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+        this.currentBoard[firstFlipRow][firstFlipCol] = 0;
+        this.currentBoard[secFlipRow][secFlipCol] = 0;
     }
 }
