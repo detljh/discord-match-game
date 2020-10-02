@@ -17,6 +17,7 @@ module.exports = class Game {
         this.currentPlayer = null;
         this.flips = [];
         this.scores = {};
+        this.totalMatches = 0;
     }
 
     setup() {
@@ -125,6 +126,10 @@ module.exports = class Game {
             return false;
         }
 
+        if (this.currentBoard[row][column] != 0){
+            return false;
+        }
+
         this.currentBoard[row][column] = this.boardLayout[row][column];
         this.flips.push([row, column]);
         if (this.flips.length == 2) {
@@ -142,7 +147,7 @@ module.exports = class Game {
         if (this.currentBoard[firstFlipRow][firstFlipCol] == this.currentBoard[secFlipRow][secFlipCol]) {
             this.scores[this.players[this.currentPlayer]] += 1;
             this.flips = [];
-            this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+            this.totalMatches += 1;
             return MATCH
         } else {
             return NO_MATCH
@@ -172,5 +177,35 @@ module.exports = class Game {
         
         output.setDescription(description);
         return output;
+    }
+
+    checkEnd() {
+        if (this.totalMatches == ((this.row * this.column) / 2)) {
+            let winners = [];
+            let max = 0;
+            for (let score in this.scores) {
+                if (this.scores[score] > max) {
+                    winners = [];
+                    winners.push(score);
+                    max = this.scores[score];
+                } else if (this.scores[score] == max) {
+                    winners.push(score);
+                }
+            }
+
+            let output = new MessageEmbed()
+            .setTitle(`Winner(s)`)
+            .setColor(this.color);
+
+            let desc = "";
+            for (let i = 0; i < winners.length; i++) {
+                desc += `<@${winners[i]}>\n`
+            }
+
+            output.setDescription(desc);
+            return output;
+        }
+
+        return null;
     }
 }
