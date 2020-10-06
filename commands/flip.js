@@ -36,7 +36,7 @@ module.exports = {
             message.channel.send(new MessageEmbed().setDescription("No match!"));
             message.channel.send(game.getOutput(game.getCurrentBoard()))
             .then(msg => {
-                msg.delete({ timeout: 2000 })
+                msg.delete({ timeout: 3000 })
                 .then(() => {
                     game.resetFlip();
                     message.channel.send(new MessageEmbed().setDescription(`<@${game.getCurrentPlayer()}>'s turn`));

@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { MATCH, NO_MATCH } = require('../constants/flip');
-const emoji = require('../constants/emoji');
+const { utility, cardCollection } = require('../constants/emoji');
 
 const boardColors = [0xf57334, 0xf5ea73, 0xa0f573, 0x73f5ce, 0x73c7f5, 0x7773f5, 0xd073f5, 0xf573ba];
 
@@ -11,7 +11,7 @@ module.exports = class Game {
         this.color = boardColors[Math.floor(Math.random() * boardColors.length)];
         this.numCards = row * column;
         this.boardLayout = [];
-        this.currentBoard = Array.from({ length: row }, () => Array.from({ length: column }, () => 0));
+        this.currentBoard = Array.from({ length: row }, () => Array.from({ length: column }, () => utility.cardDown));
         this.players = [];
         this.setupStarted = false;
         this.gameStarted = false;
@@ -24,10 +24,11 @@ module.exports = class Game {
 
     setup() {
         let cards = [];
-        let chars = 'abcdefghijklmnopqrstuvwxyz';
+        let emoji = cardCollection.slice(0);
         for (let i = 0; i < this.numCards / 2; i++) {
-            cards.push(chars[i]);
-            cards.push(chars[i]);
+            let chosen = emoji.splice(Math.floor(Math.random() * emoji.length), 1)[0];
+            cards.push(chosen);
+            cards.push(chosen);
         }
 
         this.boardLayout = Array.from({ length: this.row }, () => Array.from({ length: this.column }, () => cards.splice(Math.floor(Math.random() * cards.length), 1)[0]));
@@ -64,11 +65,11 @@ module.exports = class Game {
         for (let i = 0; i <= this.row; i++) {
             for (let j = 0; j <= this.column; j++) {
                 if (i == 0 && j == 0) {
-                    boardOutput += "x";
+                    boardOutput += utility.blackSquare;
                 } else if (i == 0) {
-                    boardOutput += emoji[j];
+                    boardOutput += utility[j];
                 } else if (j == 0) {
-                    boardOutput += emoji[String.fromCharCode('A'.charCodeAt(0) + i - 1)];
+                    boardOutput += utility[String.fromCharCode('A'.charCodeAt(0) + i - 1)];
                 } else {
                     boardOutput += this.currentBoard[i-1][j-1];
                 }
@@ -84,11 +85,11 @@ module.exports = class Game {
         for (let i = 0; i <= this.row; i++) {
             for (let j = 0; j <= this.column; j++) {
                 if (i == 0 && j == 0) {
-                    boardOutput += "x";
+                    boardOutput += utility.blackSquare;
                 } else if (i == 0) {
-                    boardOutput += emoji[j];
+                    boardOutput += utility[j];
                 } else if (j == 0) {
-                    boardOutput += emoji[String.fromCharCode('A'.charCodeAt(0) + i - 1)];
+                    boardOutput += utility[String.fromCharCode('A'.charCodeAt(0) + i - 1)];
                 } else {
                     boardOutput += this.boardLayout[i-1][j-1];
                 }
@@ -128,7 +129,7 @@ module.exports = class Game {
             return false;
         }
 
-        if (this.currentBoard[row][column] != 0){
+        if (this.currentBoard[row][column] != utility.cardDown){
             return false;
         }
 
@@ -163,8 +164,8 @@ module.exports = class Game {
         let secFlipCol = this.flips[1][1];
         this.flips = [];
         this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
-        this.currentBoard[firstFlipRow][firstFlipCol] = 0;
-        this.currentBoard[secFlipRow][secFlipCol] = 0;
+        this.currentBoard[firstFlipRow][firstFlipCol] = utility.cardDown;
+        this.currentBoard[secFlipRow][secFlipCol] = utility.cardDown;
     }
     
     getScoreOutput() {

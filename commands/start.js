@@ -37,7 +37,7 @@ module.exports = {
                 .then(msg => {
                     msg.delete({ timeout: timeout })
                     .then(() => {
-                        message.channel.send(new MessageEmbed().setDescription("The game has started."));
+                        message.channel.send(new MessageEmbed().setDescription(`The game has started. <@${game.getCurrentPlayer()}> is starting!`));
                         sendBoard(game, game.getCurrentBoard(), message);
                         game.startGame();
                     })
