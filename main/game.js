@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { MATCH, NO_MATCH } = require('../constants/flip');
+const emoji = require('../constants/emoji');
 
 const boardColors = [0xf57334, 0xf5ea73, 0xa0f573, 0x73f5ce, 0x73c7f5, 0x7773f5, 0xd073f5, 0xf573ba];
 
@@ -65,9 +66,9 @@ module.exports = class Game {
                 if (i == 0 && j == 0) {
                     boardOutput += "x";
                 } else if (i == 0) {
-                    boardOutput += j;
+                    boardOutput += emoji[j];
                 } else if (j == 0) {
-                    boardOutput += String.fromCharCode('A'.charCodeAt(0) + i - 1);
+                    boardOutput += emoji[String.fromCharCode('A'.charCodeAt(0) + i - 1)];
                 } else {
                     boardOutput += this.currentBoard[i-1][j-1];
                 }
@@ -85,9 +86,9 @@ module.exports = class Game {
                 if (i == 0 && j == 0) {
                     boardOutput += "x";
                 } else if (i == 0) {
-                    boardOutput += j;
+                    boardOutput += emoji[j];
                 } else if (j == 0) {
-                    boardOutput += String.fromCharCode('A'.charCodeAt(0) + i - 1);
+                    boardOutput += emoji[String.fromCharCode('A'.charCodeAt(0) + i - 1)];
                 } else {
                     boardOutput += this.boardLayout[i-1][j-1];
                 }
