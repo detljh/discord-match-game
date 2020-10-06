@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { MATCH, NO_MATCH } = require('../constants/flip');
+const { sendBoard } = require('../main/utility');
 
 module.exports = {
     name: 'flip',
@@ -37,16 +38,9 @@ module.exports = {
             .then(msg => {
                 msg.delete({ timeout: 2000 })
                 .then(() => {
-                    message.channel.messages.fetch({limit: 100})
-                    .then(fetched => {
-                        fetched.forEach(msg => {
-                            if (msg.author.bot) msg.delete();
-                        });
-                        game.resetFlip();
-                        message.channel.send(new MessageEmbed().setDescription(`<@${game.getCurrentPlayer()}>'s turn`));
-                        return message.channel.send(game.getOutput(game.getCurrentBoard()));
-                    })
-                    .catch(console.error);
+                    game.resetFlip();
+                    message.channel.send(new MessageEmbed().setDescription(`<@${game.getCurrentPlayer()}>'s turn`));
+                    sendBoard(game, game.getCurrentBoard(), message);
                 })
                 .catch(console.error);
             })
@@ -55,7 +49,7 @@ module.exports = {
             if (flip == MATCH) {
                 message.channel.send(new MessageEmbed().setDescription("Match made!"));
             }
-            message.channel.send(game.getOutput(game.getCurrentBoard()));
+            sendBoard(game, game.getCurrentBoard(), message);
             let ended = game.checkEnd();
             if (ended) {
                 message.channel.send(game.getScoreOutput());

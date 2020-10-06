@@ -56,6 +56,7 @@ module.exports = {
         game.setPlayers([message.author.id]);
         games.set(message.author.id, game);
         users.set(message.author.id, message.author.id);
-        message.reply(`Please wait for users to join the game.`);
+        embed.setDescription(`Please wait for users to join the game.`);
+        return message.reply(embed);
     }
 }

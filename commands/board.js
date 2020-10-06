@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { sendBoard } = require('../main/utility');
 
 module.exports = {
     name: 'board',
@@ -13,7 +14,7 @@ module.exports = {
             if (!game.isGameStarted()) {
                 reply += `The game has not started.`;
             } else {
-                return message.channel.send(game.getOutput(game.getCurrentBoard()));
+                return sendBoard(game, game.getCurrentBoard(), message);
             }
         } else {
             reply += `You are not in a game.`;

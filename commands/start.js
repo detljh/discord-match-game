@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { sendBoard } = require('../main/utility');
 
 module.exports = {
     name: 'start',
@@ -37,7 +38,7 @@ module.exports = {
                     msg.delete({ timeout: timeout })
                     .then(() => {
                         message.channel.send(new MessageEmbed().setDescription("The game has started."));
-                        message.channel.send(game.getOutput(game.getCurrentBoard()));
+                        sendBoard(game, game.getCurrentBoard(), message);
                         game.startGame();
                     })
                     .catch(console.error);

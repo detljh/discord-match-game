@@ -18,6 +18,7 @@ module.exports = class Game {
         this.flips = [];
         this.scores = {};
         this.totalMatches = 0;
+        this.tempMessages = []
     }
 
     setup() {
@@ -207,5 +208,17 @@ module.exports = class Game {
         }
 
         return null;
+    }
+
+    addTempMessage(id) {
+        this.tempMessages.push(id);
+    }
+
+    getTempMessages() {
+        return this.tempMessages;
+    }
+
+    clearTempMessages() {
+        this.tempMessages = [];
     }
 }
