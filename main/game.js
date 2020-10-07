@@ -122,6 +122,10 @@ module.exports = class Game {
         return this.players[this.currentPlayer];
     }
 
+    hasFlipped() {
+        return this.flips.length == 2;
+    }
+
     flip(row, column) {
         row = row.toLowerCase().charCodeAt(0) - 97;
         column -= 1;

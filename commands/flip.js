@@ -29,6 +29,10 @@ module.exports = {
             return message.reply(new MessageEmbed().setDescription("Incorrect usage."));
         }
 
+        if (game.hasFlipped()) {
+            return message.reply(new MessageEmbed().setDescription("You can only flip 2 cards."));
+        }
+
         row = args[0];
         column = args[1];
         flip = game.flip(row, column);
