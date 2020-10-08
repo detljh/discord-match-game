@@ -10,8 +10,8 @@ module.exports = {
     args: true,
     execute(message, args, games, users) {
         let userId = message.author.id;
-        let roomMaster = users.get(userId);
-        let game = games.get(roomMaster);
+        let gameMaster = users.get(userId);
+        let game = games.get(gameMaster);
 
         if (!game) {
             return message.reply(new MessageEmbed().setDescription("You are not in a game."));
@@ -53,11 +53,17 @@ module.exports = {
             if (flip == MATCH) {
                 message.channel.send(new MessageEmbed().setDescription("Match made!"));
             }
+            
             sendBoard(game, game.getCurrentBoard(), message);
             let ended = game.checkEnd();
             if (ended) {
                 message.channel.send(game.getScoreOutput());
                 message.channel.send(ended);
+                let players = game.getPlayers();
+                players.forEach(p => {
+                    users.delete(p);
+                });
+                games.delete(message.author.id);
             }
             return;
         } else {
