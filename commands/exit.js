@@ -10,6 +10,7 @@ module.exports = {
         let reply = "";
 
         if (gameMaster) {
+            users.delete(message.author.id);
             let game = games.get(gameMaster);
             let players = game.getPlayers();
             
@@ -20,16 +21,26 @@ module.exports = {
                 players = players.filter(p => p != message.author.id);
                 game.setPlayers(players);
                 games.set(players[0], game);
-                games.delete(message.author.id);
                 if (gameMaster == message.author.id) {
                     reply += `Game master <@${message.author.id}> has exited the game.`;
                     reply += `<@${players[0]}> is now the game master.`;
                 } else {
                     reply += `<@${message.author.id}> has exited the game.`;
                 }
+
+                let ended = game.checkEnd();
+                if (ended) {
+                    message.channel.send(game.getScoreOutput());
+                    message.channel.send(ended);
+                    let players = game.getPlayers();
+                    players.forEach(p => {
+                        users.delete(p);
+                    });
+                    games.delete(message.author.id);
+                }
+                return;
             }
 
-            users.delete(message.author.id);
         } else {
             reply += `You are not in a game.`;
         }

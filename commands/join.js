@@ -15,10 +15,10 @@ module.exports = {
             return message.reply(embed);
         }
 
-        // if (users.get(message.author.id)) {
-        //     embed.setDescription(`You have already joined a game.`);
-        //     return message.reply(embed);
-        // }
+        if (users.get(message.author.id)) {
+            embed.setDescription(`You have already joined a game.`);
+            return message.reply(embed);
+        }
 
         if (game.isSetupStarted()) {
             embed.setDescription(`This game has already started.`);

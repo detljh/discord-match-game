@@ -179,7 +179,11 @@ module.exports = class Game {
 
         let description = "";
         for (let score in this.scores) {
-            description += `<@${score}>: ${this.scores[score]}\n`;
+            if (this.players.includes(score)) {
+                description += `<@${score}>: ${this.scores[score]}\n`;
+            } else {
+                description += `<@${score}> (Player has left): ${this.scores[score]}\n`;
+            }
         }
         
         output.setDescription(description);
@@ -187,10 +191,14 @@ module.exports = class Game {
     }
 
     checkEnd() {
-        if (this.totalMatches == ((this.row * this.column) / 2)) {
+        if (this.totalMatches == ((this.row * this.column) / 2) || this.players.length == 1) {
             let winners = [];
             let max = 0;
             for (let score in this.scores) {
+                if (!this.players.includes(score)) {
+                    continue;
+                }
+                
                 if (this.scores[score] > max) {
                     winners = [];
                     winners.push(score);
@@ -207,6 +215,7 @@ module.exports = class Game {
             let desc = "";
             for (let i = 0; i < winners.length; i++) {
                 desc += `<@${winners[i]}>\n`
+                
             }
 
             output.setDescription(desc);
