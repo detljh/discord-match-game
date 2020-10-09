@@ -12,7 +12,7 @@
 
 **flip \<row column\>:** Flip a card over. Rows are the letters and columns are the numbers.
 
-## Demo
-
+## Preview
+![Discord Bot Game Preview](public/preview.png)
 ---
 This is a discord bot made with [discord.js](https://discord.js.org/#/).
