@@ -1,4 +1,4 @@
-const { prefix } = require('../config.json');
+const prefix = process.env.PREFIX;
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
