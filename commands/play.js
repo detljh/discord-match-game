@@ -36,8 +36,8 @@ module.exports = {
             column = args[1];
         }
 
-        if (row > 25 || column > 25 || row < 2 || column < 2) {
-            embed.setDescription(`Rows and columns must be in the range 2-25.`);
+        if (row > 10 || column > 10 || row < 2 || column < 2) {
+            embed.setDescription(`Rows and columns must be in the range 2-10.`);
             return message.reply(embed);
         }
 
@@ -47,8 +47,8 @@ module.exports = {
             return message.reply(embed);
         }
 
-        if (numCards > 50) {
-            embed.setDescription(`Board dimensions are too large. Maximum number of cards is 50.`);
+        if (numCards > 100) {
+            embed.setDescription(`Board dimensions are too large. Maximum number of cards is 100.`);
             return message.reply(embed);
         }
 
@@ -56,6 +56,7 @@ module.exports = {
         game.setPlayers([message.author.id]);
         games.set(message.author.id, game);
         users.set(message.author.id, message.author.id);
-        message.reply(`Please wait for users to join the game.`);
+        embed.setDescription(`Please wait for users to join the game.`);
+        return message.reply(embed);
     }
 }

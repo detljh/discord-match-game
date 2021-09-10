@@ -1,10 +1,8 @@
 const { MessageEmbed } = require('discord.js');
-const { sendBoard } = require('../main/utility');
 
 module.exports = {
-    name: 'board',
-    aliases: ['show'],
-    description: 'Display the current board of the game you are in.',
+    name: 'score',
+    description: 'Display the current scores of the game you are in.',
     cooldown: 7,
     execute(message, args, games, users) {
         let gameMaster = users.get(message.author.id);
@@ -12,9 +10,9 @@ module.exports = {
         if (gameMaster) {
             let game = games.get(gameMaster);
             if (!game.isGameStarted()) {
-                reply += `The game has not started.`;
+                reply += `You cannot check the scores yet`;
             } else {
-                return sendBoard(game, game.getCurrentBoard(), message);
+                return message.channel.send(game.getScoreOutput());
             }
         } else {
             reply += `You are not in a game.`;

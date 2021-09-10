@@ -15,10 +15,10 @@ module.exports = {
             return message.reply(embed);
         }
 
-        // if (users.get(message.author.id)) {
-        //     embed.setDescription(`You have already joined a game.`);
-        //     return message.reply(embed);
-        // }
+        if (users.get(message.author.id)) {
+            embed.setDescription(`You have already joined a game.`);
+            return message.reply(embed);
+        }
 
         if (game.isSetupStarted()) {
             embed.setDescription(`This game has already started.`);
@@ -36,7 +36,7 @@ module.exports = {
         game.setPlayers(players);
         users.set(message.author.id, user.id);
 
-        let reply = `You have joined ${user.toString()}'s game. Current Players:\n`;
+        let reply = `<@${message.author.id}> has joined ${user.toString()}'s game. Current Players:\n`;
 
         for (let i = 0; i < players.length; i++) {
             reply += `${i+1}. <@${players[i]}>\n`;
